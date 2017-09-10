@@ -15,13 +15,45 @@ const DISPLAYTIMERTITLE = document.getElementById('timer-title');
 const DISPLAYCOUNTDOWN = document.getElementById('countdown');
 const DISPLAYOVERLAY = document.getElementsByClassName("overlay")[0];
 let timer;
+let startChangeInterval;
+let changeInterval;
 
 // add the button events
-document.getElementById('session-minus').addEventListener('click', () => changeLength(0, -1));
-document.getElementById('session-plus').addEventListener('click', () => changeLength(0, +1));
-document.getElementById('break-minus').addEventListener('click', () => changeLength(1, -1));
-document.getElementById('break-plus').addEventListener('click', () => changeLength(1, +1));
+document.getElementById('session-minus').addEventListener('mousedown', () => changeLength(0, -1));
+document.getElementById('session-minus').addEventListener('mousedown', () => keepChangingLength(0, -1));
+document.getElementById('session-minus').addEventListener('mouseup', clearChangeIntervals);
+document.getElementById('session-plus').addEventListener('mousedown', () => changeLength(0, +1));
+document.getElementById('session-plus').addEventListener('mousedown', () => keepChangingLength(0, +1));
+document.getElementById('session-plus').addEventListener('mouseup', clearChangeIntervals);
+document.getElementById('break-minus').addEventListener('mousedown', () => changeLength(1, -1));
+document.getElementById('break-minus').addEventListener('mousedown', () => keepChangingLength(1, -1));
+document.getElementById('break-minus').addEventListener('mouseup', clearChangeIntervals);
+document.getElementById('break-plus').addEventListener('mousedown', () => changeLength(1, +1));
+document.getElementById('break-plus').addEventListener('mousedown', () => keepChangingLength(1, +1));
+document.getElementById('break-plus').addEventListener('mouseup', clearChangeIntervals);
 document.getElementsByClassName('circle')[0].addEventListener('click', timerControl);
+
+function clearChangeIntervals() {
+	clearInterval(changeInterval);
+	clearInterval(startChangeInterval);
+}
+
+function keepChangingLength(i, n, delay=500, repeat=100) {
+	startChangeInterval = setTimeout(() => {
+		changeInterval = setInterval(() => changeLength(i, n), repeat)},
+	delay);
+}
+
+function changeLength(i, n) {
+	// if a timer isn't running, updates session or break length. Minimum is one minute.
+	if (!timerRunning) {
+		lengths[i] = Math.max(lengths[i]+n, 1);
+		if (i === currentTimerIndex) {
+			resetSecondsRemaining();
+		}
+		display();
+	}
+}
 
 function display() {
 	// display timer title (session or break).
@@ -51,17 +83,6 @@ function setColorClass() {
 	} else {
 		DISPLAYOVERLAY.classList.add('break-color');
 		DISPLAYOVERLAY.classList.remove('session-color');
-	}
-}
-
-function changeLength(i, n) {
-	// if a timer isn't running, updates session or break length. Minimum is one minute.
-	if (!timerRunning) {
-		lengths[i] = Math.max(lengths[i]+n, 1);
-		if (i === currentTimerIndex) {
-			resetSecondsRemaining();
-		}
-		display();
 	}
 }
 
