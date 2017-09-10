@@ -11,16 +11,33 @@
 <main>
 	<div class="container">
 		<h1>Tic Tac Toe</h1>
-		<div class="grid">
-			<div id="1" class="border-b border-r">X</div>
-			<div id="2" class="border-b border-r">O</div>
-			<div id="3" class="border-b"></div>
-			<div id="4" class="border-b border-r"></div>
-			<div id="5" class="border-b border-r"></div>
-			<div id="6" class="border-b"></div>
-			<div id="7" class="border-r"></div>
-			<div id="8" class="border-r"></div>
-			<div id="9"></div>
+		<div class="game-container">
+
+			<section id="game-players" class="game-text">
+				<p>How many players?</p>
+				<button id="one-player">1 Player</button>
+				<button id="two-players">2 Players</button>
+			</section>
+
+			<section id="icon-choice" class="game-text hide-opacity hide-z-index">
+				<p>Would you like to be X or O?</p>	
+				<button id="X">X</button>
+				<button id="O">O</button>
+				<button id="back">back</button>
+			</section>
+
+			<section class="game-grid hide-opacity hide-z-index">
+				<div id="0" class="border-b border-r"></div>
+				<div id="1" class="border-b border-r"></div>
+				<div id="2" class="border-b"></div>
+				<div id="3" class="border-b border-r"></div>
+				<div id="4" class="border-b border-r"></div>
+				<div id="5" class="border-b"></div>
+				<div id="6" class="border-r"></div>
+				<div id="7" class="border-r"></div>
+				<div id="8"></div>
+			</secion>
+
 		</div>
 	</div>
 </main>

@@ -11,6 +11,7 @@ html {
 
 body {
 	font-family: 'Open Sans', sans-serif;
+	background-color: #F4FFFF;
 }
 
 .container {
@@ -26,15 +27,86 @@ h1 {
 	font-weight: 400;
 }
 
-.grid {
+.game-container {
 	margin: 50px auto;
+	width: 380px;
+	height: 380px;
+	box-sizing: border-box;
+	background: radial-gradient(#FBF1FE, #E280FF);
+	border: 30px solid #01304D;
+	border-radius: 20px;
+	box-shadow: 0 10px 5px rgba(0, 0, 0, 0.7),
+				4px 0 4px rgba(0, 0, 0, 0.4),
+				-4px 0 4px rgba(0, 0, 0, 0.4);
+	color: #011640;
+	position: relative;
+}
+
+.game-container > section {
+	position: absolute;
+	padding: 1rem;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	transition: 1s;
+}
+
+/* GAME PLAYERS */
+
+.game-text {
+	text-align: center;
+	flex-flow: column;
+}
+
+.game-text p {
+	font-size: 3.5rem;
+	margin-top: 3rem;
+	line-height: 1.3;
+}
+
+.game-text button {
+	margin: 3rem 1rem;
+	display: inline-block;
+	outline: none;
+	border: none;
+	background-color: transparent;
+	font-size: 2.5rem;
+	padding: 1rem;
+	color: #004C6B;
+	border: 2px dashed transparent;
+	border-radius: 2rem;
+}
+
+.game-text button:hover, .game-players:focus {
+	border-color: #03385A;
+	cursor: pointer;
+}
+
+.game-text button:active {
+	background-color: #004C6B;
+	color: #fff;
+}
+
+#back {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+	border: none;
+}
+
+#back:hover, #back:focus, #back:active {
+	background-color: #004C6B;
+	color: #fff;
+}
+
+/* GAME GRID */
+.game-grid {
 	display: grid;
 	grid-template-columns: repeat(3, 100px);
 	grid-gap: 0;
-	padding: 10px;
 }
 
-.grid div {
+.game-grid div {
 	width: 100px;
 	height: 100px;
 	font-size: 7rem;
@@ -51,7 +123,10 @@ h1 {
 	border-right: 2px solid black;
 }
 
-/*
-1 - 6 need bottom border.
-1, 4, 7 + 2, 5, 8 need right border
- */
+ .hide-opacity {
+ 	opacity: 0 !important;
+ }
+
+ .hide-z-index {
+ 	z-index: -1;
+ }
