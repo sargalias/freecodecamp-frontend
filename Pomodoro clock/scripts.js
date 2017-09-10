@@ -1,9 +1,3 @@
-
-// add sound at the end of the timer.
-// need code for holding down mouse button change at reasonable speed.
-// try and refactor code a bit?
-// Examine solution code. Does it use objects? If yes, examine it and see how I could do mine with objects.
-
 let timerRunning = false;
 const lengths = [25, 5]; // sessionLength first.
 const TYPES = ["session", "break"];
@@ -92,7 +86,7 @@ function minutesToSeconds(minutes) {
 
 function secondsToPrettyString(seconds) {
 	let minutes = Math.floor(seconds / 60);
-	seconds = seconds % 60;
+	seconds %= 60;
 	return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
@@ -121,6 +115,10 @@ function timerTick() {
 	secondsRemaining--;
 	display();
 	if (secondsRemaining === 0) {
+		// play audio
+		let audio = new Audio("bubbles.mp3");
+		audio.play();
+	
 		changeTimer();
 	}
 }
@@ -129,7 +127,7 @@ function changeTimer() {
 	clearInterval(timer);
 	changeTimerIndex();
 	resetSecondsRemaining();
-	setTimeout(startTimer, 1000); // need to do this a second late, so that the final 0:00 display for one second.
+	setTimeout(startTimer, 1000); // need to do this a second late, so that the final 0:00 displays for one second.
 }
 
 function resetSecondsRemaining() {
