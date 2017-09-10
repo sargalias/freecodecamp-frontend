@@ -1,42 +1,8 @@
 
-/* Functionality:
-	No timer is running:
-		Can set the break time and the session length.
-		To change them, click on the buttons, then the times change.
-		Start the timer by pressing the middle circle.
-		Click the circle to start the times.
-		Program remembers if it's running the break or session timer, to resume them after.
-	
-	Timer is running:
-		No change is allowed.
-		Pause the timer by clicking the circle again.
-		If no changes are made, clicking the timer just resumes it.
-		If changes are made on the CURRENT timer, the current timer is reset and starts again with the new settings.
-
-	Timer ends:
-		Switches to the next timer (session or break) infinitely.
-
-	While the timer runs, the .overlay height is updated with a percentage of the timer run through.
-
-	Display:
-		Header:
-			Just shows current settings in minutes for both.
-		Main title:
-			Displays Session / Break! depending on which timer is active.
-		Main timer:
-			Shows a single number of minutes for the first second.
-			Shows descending time in format x:xx otherwise.
-
-	Misc:
-		Minutes should have a minimum of 1 for both timers.
-*/
-
-
+// add sound at the end of the timer.
 // need code for holding down mouse button change at reasonable speed.
-// need code for overlay fill.
-	// just change color classes based on current timer.
-	// else, just fill up acording to % between lenths minutes and seconds remaining.
-
+// try and refactor code a bit?
+// Examine solution code. Does it use objects? If yes, examine it and see how I could do mine with objects.
 
 let timerRunning = false;
 const lengths = [25, 5]; // sessionLength first.
@@ -47,26 +13,15 @@ const DISPLAYBREAKMINUTES = document.getElementById("break-minutes");
 const DISPLAYSESSIONMINUTES = document.getElementById("session-minutes");
 const DISPLAYTIMERTITLE = document.getElementById('timer-title');
 const DISPLAYCOUNTDOWN = document.getElementById('countdown');
+const DISPLAYOVERLAY = document.getElementsByClassName("overlay")[0];
 let timer;
 
-
-// add the button events, we don't need the buttons again afterwards.
+// add the button events
 document.getElementById('session-minus').addEventListener('click', () => changeLength(0, -1));
 document.getElementById('session-plus').addEventListener('click', () => changeLength(0, +1));
 document.getElementById('break-minus').addEventListener('click', () => changeLength(1, -1));
 document.getElementById('break-plus').addEventListener('click', () => changeLength(1, +1));
 document.getElementsByClassName('circle')[0].addEventListener('click', timerControl);
-
-function changeLength(i, n) {
-	// if a timer isn't running, updates session or break length. Minimum is one minute.
-	if (!timerRunning) {
-		lengths[i] = Math.max(lengths[i]+n, 1);
-		if (i === currentTimerIndex) {
-			resetSecondsRemaining();
-		}
-		display();
-	}
-}
 
 function display() {
 	// display timer title (session or break).
@@ -80,6 +35,33 @@ function display() {
 	}
 	else {
 		DISPLAYCOUNTDOWN.textContent = secondsToPrettyString(secondsRemaining);
+	}
+	displayOverlay();
+}
+
+function displayOverlay() {
+	let percentage = (1 - secondsRemaining / minutesToSeconds(lengths[currentTimerIndex])) * 100;
+	DISPLAYOVERLAY.style.height = `${percentage}%`;
+}
+
+function setColorClass() {
+	if (currentTimerIndex === 0) {
+		DISPLAYOVERLAY.classList.add('session-color');
+		DISPLAYOVERLAY.classList.remove('break-color');
+	} else {
+		DISPLAYOVERLAY.classList.add('break-color');
+		DISPLAYOVERLAY.classList.remove('session-color');
+	}
+}
+
+function changeLength(i, n) {
+	// if a timer isn't running, updates session or break length. Minimum is one minute.
+	if (!timerRunning) {
+		lengths[i] = Math.max(lengths[i]+n, 1);
+		if (i === currentTimerIndex) {
+			resetSecondsRemaining();
+		}
+		display();
 	}
 }
 
@@ -104,6 +86,7 @@ function timerControl() {
 
 function startTimer() {
 	timerRunning = true;
+	setColorClass();
 	display(); // so that the single number displays for 1 second.
 	timer = setInterval(timerTick, 1000);
 }
@@ -125,7 +108,7 @@ function changeTimer() {
 	clearInterval(timer);
 	changeTimerIndex();
 	resetSecondsRemaining();
-	startTimer();
+	setTimeout(startTimer, 1000); // need to do this a second late, so that the final 0:00 display for one second.
 }
 
 function resetSecondsRemaining() {
