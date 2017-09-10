@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Pomodoro Clodk</title>
+	<link rel="stylesheet" href="styles.css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+<body>
+
+<main>
+	<div class="container">
+
+		<header>
+			<h1>Pomodoro Clock</h1>
+
+			<div class="settings-container">
+				<div class="break-container">
+					<p id="break-text">Break length</p>
+					<div class="select">
+						<button class="select-button" id="break-minus">&minus;</button>
+						<p id="break-minutes">5</p>
+						<button class="select-button" id="break-plus">&plus;</button>
+					</div>
+				</div>
+
+				<div class="session-container">
+					<p id="session-text">Session length</p>
+					<div class="select">
+						<button class="select-button" id="session-minus">&minus;</button>
+						<p id="session-minutes">25</p>
+						<button class="select-button" id="session-plus">&plus;</button>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<section>
+			<div class="timer-container">
+				<div class="circle">
+					<div class="circle-inner">
+						<p id="timer-title">Session</p>
+						<p id="countdown">25</p>
+						<div class="overlay break-color"></div>
+					</div>
+				</div>
+			</div>
+
+	</div>
+</main>
+
+<script src="scripts.js"></script>
+	
+</body>
+</html>

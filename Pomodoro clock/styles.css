@@ -1,0 +1,109 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	background-color: #4f434e;
+	color: #fff;
+	font-family: 'Open Sans', sans-serif;
+}
+
+.container {
+	text-align: center;
+	margin-top: 50px;
+}
+
+h1 {
+	font-size: 8rem;
+}
+
+.settings-container {
+	display: flex;
+	justify-content: center;
+	font-size: 2rem;
+}
+
+.session-container {
+	margin: 30px;
+}
+
+.break-container {
+	margin: 30px;
+}
+
+.select {
+	font-size: 3rem;
+}
+
+.select-button {
+	display: inline;
+	padding: 0 1rem;
+	cursor: pointer;
+	border: none;
+	background-color: #4f434e;
+	color: #fff;
+	font-size: 3rem;
+	outline: none;
+}
+
+.select p {
+	display: inline;
+}
+
+.timer-container {
+	display: flex;
+	justify-content: center;
+}
+
+.circle {
+	border: 3px solid #249167;
+	border-radius: 50%;
+	width: 300px;
+	height: 300px;
+	position: relative;
+	cursor: pointer;
+}
+
+.circle-inner {
+	display: flex;
+	flex-flow: column;
+	position: relative;
+	margin: 2%;
+	width: 96%;
+	height: 96%;
+	border-radius: 50%;
+	overflow: hidden;
+}
+
+#timer-title {
+	font-size: 5rem;
+	font-weight: 400;
+	margin-top: 60px;
+	margin-bottom: 30px;
+	z-index: 1;
+}
+
+#countdown {
+	font-size: 6rem;
+	z-index: 1;
+}
+
+.overlay {
+	width: 100%;	
+	position: absolute;
+	bottom: 0;
+	height: 50%;
+}
+
+.session-color {
+	background-color: #249167;
+}
+
+.break-color {
+	background-color: #d83122;	
+}
