@@ -1,10 +1,8 @@
 /*
 Still need to do:
-	Score is kept and displayed.
+	Score is kept and displayed - easy.
 	AI turn.
-	message for who goes first.
-	player 1 prefix in icon choice for 2 players.
-	reset the game after someone has won or game is over.
+	Win / draw animation.
  */
 
 const board = [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined];
@@ -23,6 +21,7 @@ const PLAYERS = ["X", "O"]; // index 0 is player 1, index 1 is player 2 or compu
 let isPcAPlayer;
 let currentPlayer = Math.round(Math.random()); // 0 or 1, also initialises who goes first.
 const GAMECONTAINERS = document.querySelectorAll(".game-container > section");
+let isGameFinished = false;
 
 // Play events:
 const BOXES = document.querySelectorAll(".game-grid div");
@@ -39,21 +38,29 @@ document.getElementById("X").addEventListener("click", () => setPlayerOneIcon("X
 document.getElementById("O").addEventListener("click", () => setPlayerOneIcon("O"));
 document.getElementById("back").addEventListener("click", () => addRemoveHideClass(GAMECONTAINERS[1], GAMECONTAINERS[0]));
 
+// Turn
+const turnSection = document.getElementById("turn-section");
+const turn = document.getElementById("turn");
 
 function setNumberOfPlayers(num) {
-	isPcAPlayer = num === 1 ? true: false;
+	if (!isPcAPlayer) {
+		document.getElementById("player-1-only").textContent = "Player 1: ";
+		isPcAPlayer = false;	
+	} else {
+		isPcAPlayer = true;
+	}
 	addRemoveHideClass(GAMECONTAINERS[0], GAMECONTAINERS[1]);
 }
 
 function setPlayerOneIcon(icon) {
-	if (icon === "X") {
-		PLAYERS[0] = "X";
-		PLAYERS[1] = "O";
-	} else{
-		PLAYERS[1] = "X";
+	if (icon === "O") {
 		PLAYERS[0] = "O";
+		PLAYERS[1] = "X";
 	}
 	addRemoveHideClass(GAMECONTAINERS[1], GAMECONTAINERS[2]);
+	setTimeout(() => turnSection.classList.remove("hide-opacity"), 1000);
+	updateDisplay();
+
 }
 
 function addRemoveHideClass(tagHide, tagShow, delay=1000) {
@@ -64,17 +71,20 @@ function addRemoveHideClass(tagHide, tagShow, delay=1000) {
 }
 
 function play() {
-	if (move(parseInt(this.id))) { // player has moved.
-		displayBoard();
-		console.log('alerting');
-		if (hasWon(currentPlayer)) {
-			console.log('displaying');
-			alert("win");
+	if (move(parseInt(this.id[1]))) { // make a move
+		displayBoard(); // update the board
+		if (hasWon(currentPlayer)) { // check if win
+			setTimeout(reset, 1000);
+			isGameFinished = true;
+			return;
 			// code to reset game and display nice stuff.
-		} else if (isGameOver()) {
-			alert('game over');
+		} else if (isGameOver()) { // check if game over
+			setTimeout(reset, 1000);
+			isGameFinished = true;
+			return;
 		}
-		changePlayerIndex();
+		changePlayerIndex(); // update player index
+		displayPlayerTurn(); // update display with new player index
 	}
 }
 
@@ -83,6 +93,9 @@ function changePlayerIndex() {
 }
 
 function move(boxIndex) {
+	if (isGameFinished) {
+		return false;
+	}
 	if (isPcAPlayer && currentPlayer !== 0) { // prevents player from playing during PC's turn.
 		return false;
 	}
@@ -103,6 +116,9 @@ function hasWon(playerIndex) {
 			}
 		}
 		if (hasWon) {
+			for (let i of winCombo) {
+				BOXES[i].classList.add("highlight");
+			}
 			return true;
 		}
 	}
@@ -113,6 +129,10 @@ function isGameOver() {
 	return board.every((el) => Boolean(el));
 }
 
+function updateDisplay() {
+	displayBoard();
+	displayPlayerTurn();
+}
 
 function displayBoard() {
 	for (let i=0; i<9; i++) {
@@ -120,3 +140,26 @@ function displayBoard() {
 	}
 }
 
+function displayPlayerTurn() {
+	addRemoveHideClass(turn, turn, 100);
+	let content = currentPlayer === 1 && isPcAPlayer ? "PC" : currentPlayer+1;
+	setTimeout(() => turn.textContent = content, 100);
+}
+
+function reset(delay=1000) {
+	setTimeout(() => {turn.textContent = currentPlayer === 1 && isPcAPlayer ? "PC" : currentPlayer+1}, delay / 2);
+	addRemoveHideClass(GAMECONTAINERS[2], GAMECONTAINERS[2], delay);
+	addRemoveHideClass(GAMECONTAINERS[3], GAMECONTAINERS[3], delay);
+	setTimeout(resetBoard, delay);
+	setTimeout(() => {isGameFinished = false}, delay * 2);
+	currentPlayer = Math.round(Math.random());
+
+}
+
+function resetBoard() {
+	for (let i=0; i<9; i++) {
+		BOXES[i].classList.remove("highlight");
+		BOXES[i].textContent = "";
+		board[i] = undefined;
+	}
+}

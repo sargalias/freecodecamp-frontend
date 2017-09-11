@@ -34,7 +34,7 @@ h1 {
 	box-sizing: border-box;
 	background: radial-gradient(#FBF1FE, #E280FF);
 	border: 30px solid #01304D;
-	border-radius: 20px;
+	border-radius: 10px;
 	box-shadow: 0 10px 5px rgba(0, 0, 0, 0.7),
 				4px 0 4px rgba(0, 0, 0, 0.4),
 				-4px 0 4px rgba(0, 0, 0, 0.4);
@@ -51,6 +51,19 @@ h1 {
 	transition: 1s;
 }
 
+/* TURN SECTION */
+#turn-section {
+	margin-top: -70px;
+	color: #fff;
+	height: unset;
+	transition: 0.5s;
+}
+
+#turn-section p, #turn-section span {
+	font-size: 2.2rem;
+	transition: 0.1s;
+}
+
 /* GAME PLAYERS */
 
 .game-text {
@@ -65,7 +78,7 @@ h1 {
 }
 
 .game-text button {
-	margin: 3rem 1rem;
+	margin: 3rem 1rem 1rem;
 	display: inline-block;
 	outline: none;
 	border: none;
@@ -130,3 +143,7 @@ h1 {
  .hide-z-index {
  	z-index: -1;
  }
+
+.highlight {
+	background-color: rgba(0, 0, 0, 0.3);
+}
