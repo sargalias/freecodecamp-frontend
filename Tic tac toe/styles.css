@@ -11,7 +11,7 @@ html {
 
 body {
 	font-family: 'Open Sans', sans-serif;
-	background-color: #F4FFFF;
+	background-color: #FDE6E8;
 }
 
 .container {
@@ -25,6 +25,7 @@ h1 {
 	font-size: 5rem;
 	margin-top: 70px;
 	font-weight: 400;
+	color: #2C4770;
 }
 
 .game-container {
@@ -32,13 +33,14 @@ h1 {
 	width: 380px;
 	height: 380px;
 	box-sizing: border-box;
-	background: radial-gradient(#FBF1FE, #E280FF);
-	border: 30px solid #01304D;
+	/*background: radial-gradient(#FBF1FE, #E280FF);*/
+	background: #FAC8CD;
+	border: 30px solid #2C4770;
 	border-radius: 10px;
 	box-shadow: 0 10px 5px rgba(0, 0, 0, 0.7),
 				4px 0 4px rgba(0, 0, 0, 0.4),
 				-4px 0 4px rgba(0, 0, 0, 0.4);
-	color: #011640;
+	color: #2C4770;
 	position: relative;
 }
 
@@ -85,18 +87,18 @@ h1 {
 	background-color: transparent;
 	font-size: 2.5rem;
 	padding: 1rem;
-	color: #004C6B;
+	color: #4F688E;
 	border: 2px dashed transparent;
 	border-radius: 2rem;
 }
 
 .game-text button:hover, .game-players:focus {
-	border-color: #03385A;
+	border-color: #4F688E;
 	cursor: pointer;
 }
 
 .game-text button:active {
-	background-color: #004C6B;
+	background-color: #4F688E;
 	color: #fff;
 }
 
@@ -108,7 +110,7 @@ h1 {
 }
 
 #back:hover, #back:focus, #back:active {
-	background-color: #004C6B;
+	background-color: #4F688E;
 	color: #fff;
 }
 
@@ -129,11 +131,11 @@ h1 {
 }
 
 .border-b {
-	border-bottom: 2px solid black;
+	border-bottom: 2px solid #2C4770;
 }
 
 .border-r {
-	border-right: 2px solid black;
+	border-right: 2px solid #2C4770;
 }
 
  .hide-opacity {

@@ -159,7 +159,7 @@ function displayPlayerTurn() {
 }
 
 function getPlayerTurnText() {
-	return currentPlayer === 1 && isPcAPlayer ? "PC" : `Player ${currentPlayer+1}`;
+	return currentPlayer === 1 && isPcAPlayer ? "Computer" : `Player ${currentPlayer+1}`;
 }
 
 function reset(delay=1000) {
@@ -180,7 +180,7 @@ function resetBoard() {
 	}
 }
 
-/* PC TURN */
+/* Computer TURN */
 
 function ifStartPcTurn(delay=2000) {
     if (isPcAPlayer && currentPlayer === 1) {
