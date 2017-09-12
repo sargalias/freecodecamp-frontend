@@ -147,3 +147,7 @@ h1 {
 .highlight {
 	background-color: rgba(0, 0, 0, 0.3);
 }
+
+.finish-animation p {
+	margin-top: 10rem;
+}

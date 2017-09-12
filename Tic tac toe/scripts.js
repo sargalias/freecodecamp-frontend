@@ -2,7 +2,6 @@
 Still need to do:
 	Score is kept and displayed - easy.
 	AI turn.
-	Win / draw animation.
  */
 
 const board = [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined];
@@ -36,56 +35,70 @@ document.getElementById("two-players").addEventListener("click", () => setNumber
 // Player 1 icon choice.
 document.getElementById("X").addEventListener("click", () => setPlayerOneIcon("X"));
 document.getElementById("O").addEventListener("click", () => setPlayerOneIcon("O"));
-document.getElementById("back").addEventListener("click", () => addRemoveHideClass(GAMECONTAINERS[1], GAMECONTAINERS[0]));
+document.getElementById("back").addEventListener("click", () => animationFadeTo(GAMECONTAINERS[1], GAMECONTAINERS[0]));
 
 // Turn
 const turnSection = document.getElementById("turn-section");
 const turn = document.getElementById("turn");
 
 function setNumberOfPlayers(num) {
-	if (!isPcAPlayer) {
-		document.getElementById("player-1-only").textContent = "Player 1: ";
+	if (num === 2) {
+		document.getElementById("player-1-only").textContent = "Player 1: "; // prefix for icon choice screen
 		isPcAPlayer = false;	
 	} else {
 		isPcAPlayer = true;
 	}
-	addRemoveHideClass(GAMECONTAINERS[0], GAMECONTAINERS[1]);
+	animationFadeTo(GAMECONTAINERS[0], GAMECONTAINERS[1]);
 }
 
 function setPlayerOneIcon(icon) {
 	if (icon === "O") {
-		PLAYERS[0] = "O";
-		PLAYERS[1] = "X";
+		[PLAYERS[0], PLAYERS[1]] = ["O", "X"];	
 	}
-	addRemoveHideClass(GAMECONTAINERS[1], GAMECONTAINERS[2]);
-	setTimeout(() => turnSection.classList.remove("hide-opacity"), 1000);
+	animationFadeTo(GAMECONTAINERS[1], GAMECONTAINERS[2]);
+	animationFadeTo(null, turnSection);
 	updateDisplay();
-
 }
 
-function addRemoveHideClass(tagHide, tagShow, delay=1000) {
-	tagHide.classList.add("hide-opacity");
-	setTimeout(() => tagHide.classList.add("hide-z-index"), delay);
-	setTimeout(() => tagShow.classList.remove("hide-z-index"), delay);
-	setTimeout(() => tagShow.classList.remove("hide-opacity"), delay);
+function animationFadeTo(tagHide, tagShow, delay=1000) {
+	if (tagHide) {
+		tagHide.classList.add("hide-opacity");
+		setTimeout(() => tagHide.classList.add("hide-z-index"), delay);
+	}
+	if (tagShow) {
+		setTimeout(() => tagShow.classList.remove("hide-z-index"), delay);
+		setTimeout(() => tagShow.classList.remove("hide-opacity"), delay);
+	}
 }
 
 function play() {
 	if (move(parseInt(this.id[1]))) { // make a move
 		displayBoard(); // update the board
 		if (hasWon(currentPlayer)) { // check if win
-			setTimeout(reset, 1000);
+			winAnimation();
+			setTimeout(reset, 4000);
 			isGameFinished = true;
 			return;
-			// code to reset game and display nice stuff.
 		} else if (isGameOver()) { // check if game over
-			setTimeout(reset, 1000);
+			gameOverAnimation();
+			setTimeout(reset, 4000);
 			isGameFinished = true;
 			return;
 		}
 		changePlayerIndex(); // update player index
 		displayPlayerTurn(); // update display with new player index
 	}
+}
+
+function winAnimation() {
+	document.getElementById("player-win").textContent = getPlayerTurnText(); 
+	animationFadeTo(GAMECONTAINERS[2], GAMECONTAINERS[4]);
+	animationFadeTo(GAMECONTAINERS[3]);
+}
+
+function gameOverAnimation() {
+	animationFadeTo(GAMECONTAINERS[2], GAMECONTAINERS[5]);
+	animationFadeTo(GAMECONTAINERS[3]);
 }
 
 function changePlayerIndex() {
@@ -141,19 +154,23 @@ function displayBoard() {
 }
 
 function displayPlayerTurn() {
-	addRemoveHideClass(turn, turn, 100);
-	let content = currentPlayer === 1 && isPcAPlayer ? "PC" : currentPlayer+1;
-	setTimeout(() => turn.textContent = content, 100);
+	animationFadeTo(turn, turn, 100);
+	setTimeout(() => turn.textContent = getPlayerTurnText(), 100);
+}
+
+function getPlayerTurnText() {
+	return currentPlayer === 1 && isPcAPlayer ? "PC" : `Player ${currentPlayer+1}`;
 }
 
 function reset(delay=1000) {
-	setTimeout(() => {turn.textContent = currentPlayer === 1 && isPcAPlayer ? "PC" : currentPlayer+1}, delay / 2);
-	addRemoveHideClass(GAMECONTAINERS[2], GAMECONTAINERS[2], delay);
-	addRemoveHideClass(GAMECONTAINERS[3], GAMECONTAINERS[3], delay);
+	setTimeout(() => {turn.textContent = getPlayerTurnText()}, delay / 2);
+	animationFadeTo(GAMECONTAINERS[4], GAMECONTAINERS[2], delay);
+	animationFadeTo(GAMECONTAINERS[5], GAMECONTAINERS[3], delay);
+	// animationFadeTo(GAMECONTAINERS[2], GAMECONTAINERS[2], delay);
+	// animationFadeTo(GAMECONTAINERS[3], GAMECONTAINERS[3], delay);
 	setTimeout(resetBoard, delay);
 	setTimeout(() => {isGameFinished = false}, delay * 2);
 	currentPlayer = Math.round(Math.random());
-
 }
 
 function resetBoard() {
@@ -162,4 +179,24 @@ function resetBoard() {
 		BOXES[i].textContent = "";
 		board[i] = undefined;
 	}
+}
+
+/* PC TURN */
+function pcTurn() {
+	setTimeout(pcMove, 500);
+}
+
+function pcMove() {
+	pcRandomMove();
+}
+
+function pcRandomMove() {
+	let boxIndex = randomBox();
+	while (!makeMove(boxIndex)) {
+		boxIndex = randomBox();
+	}	
+}
+
+function randomBox() {
+	return Math.floor(Math.random() * 9);
 }
