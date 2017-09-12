@@ -25,7 +25,7 @@ let isGameFinished = false;
 // Play events:
 const BOXES = document.querySelectorAll(".game-grid div");
 for (let i=0; i<9; i++) {
-	BOXES[i].addEventListener('click', play);
+	BOXES[i].addEventListener('click', playerMove);
 }
 
 // How many players
@@ -58,6 +58,7 @@ function setPlayerOneIcon(icon) {
 	animationFadeTo(GAMECONTAINERS[1], GAMECONTAINERS[2]);
 	animationFadeTo(null, turnSection);
 	updateDisplay();
+    ifStartPcTurn();
 }
 
 function animationFadeTo(tagHide, tagShow, delay=1000) {
@@ -72,22 +73,21 @@ function animationFadeTo(tagHide, tagShow, delay=1000) {
 }
 
 function play() {
-	if (move(parseInt(this.id[1]))) { // make a move
-		displayBoard(); // update the board
-		if (hasWon(currentPlayer)) { // check if win
-			winAnimation();
-			setTimeout(reset, 4000);
-			isGameFinished = true;
-			return;
-		} else if (isGameOver()) { // check if game over
-			gameOverAnimation();
-			setTimeout(reset, 4000);
-			isGameFinished = true;
-			return;
-		}
-		changePlayerIndex(); // update player index
-		displayPlayerTurn(); // update display with new player index
+	displayBoard(); // update the board
+	if (hasWon(currentPlayer)) { // check if win
+		setTimeout(winAnimation, 1000);
+		setTimeout(reset, 4000);
+		isGameFinished = true;
+		return;
+	} else if (isGameOver()) { // check if game over
+        setTimeout(gameOverAnimation, 1000);
+		setTimeout(reset, 4000);
+		isGameFinished = true;
+		return;
 	}
+	changePlayerIndex(); // update player index
+	displayPlayerTurn(); // update display with new player index
+    ifStartPcTurn(1000); // if pc's turn, pc makes a move.
 }
 
 function winAnimation() {
@@ -105,18 +105,18 @@ function changePlayerIndex() {
 	currentPlayer = ++currentPlayer % 2;
 }
 
+function playerMove() {
+    if ((isPcAPlayer && currentPlayer !== 1 || !isPcAPlayer) && move(parseInt(this.id[1]))) { // if not pc's turn and valid move
+        play();
+    }
+}
+
 function move(boxIndex) {
-	if (isGameFinished) {
-		return false;
-	}
-	if (isPcAPlayer && currentPlayer !== 0) { // prevents player from playing during PC's turn.
-		return false;
-	}
-	if (board[boxIndex]) {
-		return false;
-	}
-	board[boxIndex] = PLAYERS[currentPlayer];
-	return true;
+    if (isGameFinished || board[boxIndex]) {
+        return false;
+    }
+    board[boxIndex] = PLAYERS[currentPlayer];
+    return true;
 }
 
 function hasWon(playerIndex) {
@@ -166,11 +166,10 @@ function reset(delay=1000) {
 	setTimeout(() => {turn.textContent = getPlayerTurnText()}, delay / 2);
 	animationFadeTo(GAMECONTAINERS[4], GAMECONTAINERS[2], delay);
 	animationFadeTo(GAMECONTAINERS[5], GAMECONTAINERS[3], delay);
-	// animationFadeTo(GAMECONTAINERS[2], GAMECONTAINERS[2], delay);
-	// animationFadeTo(GAMECONTAINERS[3], GAMECONTAINERS[3], delay);
 	setTimeout(resetBoard, delay);
 	setTimeout(() => {isGameFinished = false}, delay * 2);
 	currentPlayer = Math.round(Math.random());
+    ifStartPcTurn(delay);
 }
 
 function resetBoard() {
@@ -182,19 +181,27 @@ function resetBoard() {
 }
 
 /* PC TURN */
+
+function ifStartPcTurn(delay=2000) {
+    if (isPcAPlayer && currentPlayer === 1) {
+        setTimeout(pcTurn, delay);
+    }
+}
+
 function pcTurn() {
-	setTimeout(pcMove, 500);
+	setTimeout(pcMove, 1000);
 }
 
 function pcMove() {
 	pcRandomMove();
+    play();
 }
 
 function pcRandomMove() {
 	let boxIndex = randomBox();
-	while (!makeMove(boxIndex)) {
+	while (!move(boxIndex)) {
 		boxIndex = randomBox();
-	}	
+	}
 }
 
 function randomBox() {
