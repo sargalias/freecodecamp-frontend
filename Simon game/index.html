@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Simon Game</title>
+	<link rel="stylesheet" href="styles.css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+<body>
+
+<main class="center">
+	<div class="container center">
+		<div class="outer-circle center">
+			<div id="lt" class="quarter-circle no-interact"></div>
+			<div id="rt" class="quarter-circle no-interact"></div>
+			<div id="rb" class="quarter-circle no-interact"></div>
+			<div id="lb" class="quarter-circle no-interact"></div>
+			<div class="cross" id="c-hor"></div>
+			<div class="cross" id="c-vert"></div>
+
+			<div class="inner-circle">
+				<h1>Simon</h1>
+
+				<div class="buttons-container center">
+					<div class="display">
+						<div id="display" class="center">--</div>	
+						<p>Count</p>
+					</div>
+					<div class="start">
+						<button div id="start" class="button"></button>
+						<p>Start</p>
+					</div>
+					<div class="strict">
+						<button id="strict" class="button"></button>
+						<p>Strict</p>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</main>
+
+
+
+<script src="main.js"></script>
+	
+</body>
+</html>
