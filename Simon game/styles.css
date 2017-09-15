@@ -71,7 +71,7 @@ body {
 	left: 0;
 }
 
-#lt:not(.no-interact):hover {
+#lt.highlight, #lt:not(.no-interact):active {
 	background-color: #00EB23;
 }
 
@@ -82,19 +82,19 @@ body {
 	right: 0;
 }
 
-#rt:not(.no-interact):hover {
+#rt.highlight, #rt:not(.no-interact):active {
 	background-color: #F30000;
 }
 
 #lb {
 	border-bottom-left-radius: 100%;
-	background-color: #E1DB00;
+	background-color: #A39F00;
 	bottom: 0;
 	left: 0;
 }
 
-#lb:not(.no-interact):hover {
-	background-color: #FFF805;
+#lb.highlight, #lb:not(.no-interact):active {
+	background-color: #FFFA3B;
 }
 
 #rb {
@@ -104,7 +104,7 @@ body {
 	right: 0;
 }
 
-#rb:not(.no-interact):hover {
+#rb.highlight, #rb:not(.no-interact):active {
 	background-color: #008EFE; 
 }
 
@@ -170,7 +170,7 @@ h1 {
 	background-color: #A39F00;
 }
 
-#strict:hover, #strict:focus {
+#strict.highlight, #strict:hover, #strict:focus {
 	background-color: #FFFA3B;
 	border-width: 5px;
 }
@@ -179,12 +179,16 @@ h1 {
 	box-shadow: inset 0 0 2px black;
 }
 
+#strict.active {
+	background-color: ;
+}
+
 /* JavaScript classes */
+
+/* .active:
+	for #strict and colors.
+*/
 .no-interact {
 	cursor: unset;
 	pointer-events: none;
-}
-
-.strict-on {
-	background-color: #FFFA3B;
 }
