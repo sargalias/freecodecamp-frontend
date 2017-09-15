@@ -9,6 +9,7 @@ const GAME = {
 	sound2: new Audio('sounds/simonSound2.mp3'),
 	sound3: new Audio('sounds/simonSound3.mp3'),
 	sound4: new Audio('sounds/simonSound4.mp3'),
+	soundWrong: new Audio('sounds/glimmer.mp3'),
 
 	START: document.getElementById('start'),
 	STRICT: document.getElementById('strict'),
@@ -18,7 +19,7 @@ const GAME = {
 	classActive: "highlight",
 
 	GAMEARRAY: [], // array of indices corresponding to color boxes & their respective sounds.
-	WINSCORE: 2,
+	WINSCORE: 20,
 	SCORE: 0,
 	STRICTMODE: false,
 
@@ -41,11 +42,6 @@ GAME.STRICT.addEventListener('click', (e) => {
 });
 GAME.START.addEventListener('click', () => GAME.initialiseGame());
 const globalDelay = 1000;
-
-/*
-I want a wrong sound.
-I want to disable input while a sound is playing from last player input.
-*/
 
 
 function timeout(delay, func, ...params) {
@@ -172,30 +168,30 @@ GAME.stopPlayerInput = () => {
 }
 
 GAME.playerInput = (boxIndex) => {
+	let duration = 500;
+	// stop player input while last input is being handled.
+	GAME.stopPlayerInput();
+
 	// if correct
 	if (parseInt(boxIndex) === GAME.GAMEARRAY[GAME.playerIndex]) {
-		GAME.playBox(boxIndex);
+		GAME.playBox(boxIndex, duration);
 		GAME.playerIndex++;
 
-		if (GAME.playerIndex > GAME.WINSCORE) {
-			GAME.win();
-		}
-
-		if (GAME.playerIndex === GAME.SCORE) {
-			GAME.stopPlayerInput();
+		if (GAME.playerIndex === GAME.SCORE) { // if player won this round, continue gameLoop
 			timeout(globalDelay*2, GAME.gameLoop);
+		} else {
+			setTimeout(GAME.acceptPlayerInput, duration); // if there are still boxes to go, acceptPlayerInput.
 		}
 
 	} 
 	// if wrong
 	else {
+		GAME.soundWrong.play();
 		if (GAME.STRICTMODE) {
 			timeout(globalDelay*2, GAME.initialiseGame);
 		} else {
 			timeout(globalDelay*2, GAME.gameLoop, true);
 		}
+		GAME.stopPlayerInput();
 	}
 }
-
-GAME.win = () => {};
-
