@@ -18,14 +18,15 @@ const GAME = {
 	classActive: "highlight",
 
 	GAMEARRAY: [], // array of indices corresponding to color boxes & their respective sounds.
-	WINSCORE: 20,
+	WINSCORE: 2,
 	SCORE: 0,
 	STRICTMODE: false,
 
 	isSequenceRunning: false,
 	playerIndex: 0, // what box is player currently trying to guess.
 
-	toPlay: null
+	toPlay: null,
+	flash: null
 }
 GAME.COLORBOXES = [GAME.LT, GAME.RT, GAME.RB, GAME.LB];
 GAME.SOUNDS = [GAME.sound1, GAME.sound2, GAME.sound3, GAME.sound4];
@@ -42,11 +43,8 @@ GAME.START.addEventListener('click', () => GAME.initialiseGame());
 const globalDelay = 1000;
 
 /*
-tl;dr; add some better transition between game states. Especially notifications of win / lose.
-	Other than that, it's done.
-Add a delay when starting the notes, especially when getting them wrong.
-Ideally add a wrong sound. Maybe add a highlight when the highlight changes to wrong or win.
-ADD SOME HIGHLIGHT to win display.
+I want a wrong sound.
+I want to disable input while a sound is playing from last player input.
 */
 
 
@@ -78,7 +76,7 @@ GAME.randRange = (start=0, end=4) => {
 GAME.getScore = () => {
 	if (this.SCORE === 0) {
 		return "--";
-	} else if (GAME.SCORE > GAME.WINSCORE) {
+	} else if (GAME.checkWin()) {
 		return "WIN";
 	} else {
 		return GAME.SCORE.toString().padStart(2, '0');
@@ -86,17 +84,35 @@ GAME.getScore = () => {
 }
 
 GAME.gameLoop = (repeat=false) => {
+	let delay = globalDelay;
 	if (!repeat) {
+		delay = 2000;
+
 		// add a color
 		GAME.GAMEARRAY.push(GAME.randRange());
+
 		// update score
 		GAME.SCORE++;
+
+		if (GAME.checkWin()) {
+			delay = 3000;
+			GAME.display();
+			GAME.displayFlash(globalDelay/2, delay);
+			timeout(delay, GAME.initialiseGame);
+			return;
+		}
+
+		// flash display
+		GAME.displayFlash(globalDelay/2, delay);
 	}
 	// reset player position.
 	GAME.playerIndex = 0;
+
 	// update display
 	GAME.display();
-	GAME.playSequence();
+
+	// play game sequence.
+	timeout(delay, GAME.playSequence);
 };
 
 GAME.playSequence = (duration=500, delay=500, i=0) => {
@@ -120,13 +136,28 @@ GAME.playBox = (i, duration=500) => {
 	setTimeout(() => {
 		GAME.COLORBOXES[i].classList.remove(GAME.classActive);
 	}, duration);
-	// timeout.bind(duration, GAME.COLORBOXES[i].classList.remove, GAME.classActive);
-		// the problem is bind
 };
 
 GAME.display = () => {
-	GAME.DISPLAY.textContent = GAME.getScore()
+	GAME.DISPLAY.textContent = GAME.getScore();
 };
+
+GAME.displayFlash = (duration=500, totalDuration=2000) => {
+	GAME.DISPLAY.classList.toggle(GAME.classActive);
+
+	GAME.flash = setInterval( () => {
+		GAME.DISPLAY.classList.toggle(GAME.classActive);
+	}, duration);
+
+	setTimeout( () => {
+		clearInterval(GAME.flash);
+		GAME.DISPLAY.classList.remove(GAME.classActive);
+	}, totalDuration);
+}
+
+GAME.checkWin = () => {
+	return GAME.SCORE > GAME.WINSCORE;
+}
 
 GAME.acceptPlayerInput = () => {
 	for (let box of GAME.COLORBOXES) {
@@ -152,16 +183,16 @@ GAME.playerInput = (boxIndex) => {
 
 		if (GAME.playerIndex === GAME.SCORE) {
 			GAME.stopPlayerInput();
-			timeout(globalDelay, GAME.gameLoop);
+			timeout(globalDelay*2, GAME.gameLoop);
 		}
 
 	} 
 	// if wrong
 	else {
 		if (GAME.STRICTMODE) {
-			timeout(globalDelay, GAME.initialiseGame);
+			timeout(globalDelay*2, GAME.initialiseGame);
 		} else {
-			timeout(globalDelay, GAME.gameLoop, true);
+			timeout(globalDelay*2, GAME.gameLoop, true);
 		}
 	}
 }

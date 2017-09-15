@@ -138,12 +138,17 @@ h1 {
 #display {
 	width: 70px;
 	height: 50px;
-	background: #f40000;
+	background-color: #f40000;
+	background-color: #B30000;
 	border-radius: 1rem;
 	font-size: 3rem;
 	letter-spacing: 3px;
 	text-indent: 3px;
 	box-shadow: inset 0 0 5px 1px black;
+}
+
+#display.highlight {
+	background-color: #f40000;
 }
 
 .button {
