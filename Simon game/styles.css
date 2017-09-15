@@ -29,8 +29,8 @@ body {
 .outer-circle {
 	position: relative;
 	box-sizing: border-box;
-	width: 50vh;
-	height: 50vh;
+	width: 600px;
+	height: 600px;
 	max-width: 600px;
 	max-height: 600px;
 	border: 25px solid #333;
@@ -196,4 +196,16 @@ h1 {
 .no-interact {
 	cursor: unset;
 	pointer-events: none;
+}
+
+@media screen and (max-width: 650px), screen and (max-height: 650px) {
+  .outer-circle {
+    transform: scale(0.7);
+  }
+}
+
+@media screen and (max-width: 450px), screen and (max-height: 450px) {
+  .outer-circle {
+    transform: scale(0.5);
+  }
 }
