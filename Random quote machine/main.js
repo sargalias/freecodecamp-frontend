@@ -5,6 +5,16 @@ const btnNew = document.getElementById("new");
 const btnTweet = document.getElementById("tweet");
 btnNew.addEventListener('click', randomQuote);
 
+function setQuote(quote, author) {
+	blockquote.textContent = quote;
+	cite.textContent = author;
+	btnTweet.setAttribute('href', 'https://twitter.com/intent/tweet?text=' + '"' + quote + '" - ' + author);
+}
+
+function randomIndex(max) {
+	return Math.floor(Math.random() * max);
+}
+
 function randomQuote() {
 	$.ajax({
 			url: 'https://api.forismatic.com/api/1.0/?',
@@ -12,10 +22,26 @@ function randomQuote() {
 			type: "GET",
 			dataType: 'jsonp'
 	}).done(function (response) {
-		blockquote.textContent = response.quoteText;
-		cite.textContent = response.quoteAuthor
-		btnTweet.setAttribute('href', 'https://twitter.com/intent/tweet?text=' + '"' + blockquote.textContent + '" - ' + cite.textContent);
+		setQuote(response.quoteText, response.quoteAuthor);
+	}).fail(function() {
+		randomQuoteBackup();
 	});
+}
+
+function randomQuoteBackup() {
+	if (!window.QUOTES) {
+		let xhr = new XMLHttpRequest();
+		xhr.open('Get', 'quotes.json', true);
+		xhr.onload = function() {
+			window.QUOTES = JSON.parse(this.responseText);
+			let i = randomIndex(QUOTES.length);
+			setQuote(QUOTES[i].quote, QUOTES[i].name);	
+		};
+		xhr.send();
+	} else {
+		let i = randomIndex(QUOTES.length);
+		setQuote(QUOTES[i].quote, QUOTES[i].name);	
+	}
 }
 
 $(document).ready(function() {
