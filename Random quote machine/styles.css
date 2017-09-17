@@ -63,6 +63,8 @@ cite {
 }
 
 .btn {
+	text-decoration: none;
+	color: #000;
 	display: inline-block;
 	background-color: transparent;
 	outline: none;
