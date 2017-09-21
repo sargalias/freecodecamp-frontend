@@ -17,7 +17,8 @@ body {
 .container {
 	display: flex;
 	justify-content: center;
-	margin-top: 100px;
+	align-items: center;
+	height: 100vh;
 }
 
 .calculator {
@@ -102,6 +103,5 @@ body {
 @media screen and (max-width: 400px), screen and (max-height: 400px) {
   .container {
     transform: scale(0.8);
-    margin-top: 50px;
   }
 }
