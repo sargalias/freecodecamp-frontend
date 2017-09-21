@@ -1,0 +1,24 @@
+body {
+	background-color: #B6CCCB;
+}
+
+.container {
+	margin: 0 auto;
+	background-color: #fff;
+	width: 80%;
+	max-width: 900px;
+	padding: 20px 50px;
+	box-sizing: border-box;
+}
+
+h1 {
+	text-align: center;
+}
+
+figure {
+	text-align: center;
+}
+
+a {
+	text-decoration: none;
+}
